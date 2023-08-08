@@ -16,7 +16,7 @@ import Container from "@mui/material/Container";
 import Link from "@mui/material/Link";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import SessionsTable from "./components/SessionsTable";
+import SessionsTable from "../components/SessionsTable";
 
 import { Session } from "../types/session";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";

@@ -18,7 +18,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 
 import type { InferGetServerSidePropsType, GetStaticProps } from "next";
 
-import { Session } from "../../types/session";
+import { Session } from "../types/session";
 
 interface TablePaginationActionsProps {
   count: number;
