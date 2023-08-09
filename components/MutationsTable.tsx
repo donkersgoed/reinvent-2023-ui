@@ -138,7 +138,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
     setPage(0);
   };
   function extractSessionFromMutation(mutation: Mutation): Session {
-    if (mutation.mutationType === "SessionAdded") {
+    if (mutation.mutationType === "SessionAdded" || mutation.mutationType === "SessionRemoved") {
       return mutation.mutationData;
     } else if (mutation.mutationType === "SessionUpdated") {
       // Typecast mutation.mutationData to SessionUpdatedMutation
