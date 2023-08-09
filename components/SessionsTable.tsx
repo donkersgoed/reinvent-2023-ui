@@ -122,7 +122,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
                 {row.title}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.sessionType}
+                {row.trackName}
               </TableCell>
               <TableCell style={{ width: 160 }}>{row.level}</TableCell>
             </TableRow>

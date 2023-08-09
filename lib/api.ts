@@ -2,6 +2,7 @@
 const ROOT = "api.reinvent23.l15d.com";
 
 export async function getSessions() {
+  console.log("getSessions");
   const API_URL = `https://${ROOT}/sessions`;
   const headers = { "Content-Type": "application/json" };
 
@@ -14,6 +15,7 @@ export async function getSessions() {
   return sessionsJson.sessions;
 }
 export async function getMutations() {
+  console.log("getMutations");
   const API_URL = `https://${ROOT}/mutations`;
   const headers = { "Content-Type": "application/json" };
 

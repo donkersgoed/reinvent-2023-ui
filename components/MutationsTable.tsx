@@ -16,7 +16,9 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
-import { Mutation } from "../types/mutation";
+import { Mutation, SessionUpdatedMutation } from "../types/mutation";
+import { Session } from "../types/session";
+import { convertISO8601ToCustomFormat } from "@/lib/time";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -85,11 +87,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-// Define a color mapping object
 const colorMapping = {
   SessionAdded: "#8ED28E",
   SessionUpdated: "#85C1E9",
   SessionRemoved: "#E74C3C",
+};
+const textColorMapping = {
+  SessionAdded: "#000",
+  SessionUpdated: "#000",
+  SessionRemoved: "#FFF",
+};
+const mutationDisplayNameMapping = {
+  SessionAdded: "Session Added",
+  SessionUpdated: "Session Updated",
+  SessionRemoved: "Session Removed",
 };
 type MutationType = keyof typeof colorMapping;
 
@@ -99,10 +110,11 @@ interface MutationTypeTextProps {
 
 const MutationTypeText = styled("div")<MutationTypeTextProps>(({ mutationType }) => ({
   borderRadius: "15px",
-  padding: "8px",
+  padding: "2px",
   alignContent: "center",
   backgroundColor: colorMapping[mutationType] || "#f0f0f0",
   textAlign: "center",
+  color: textColorMapping[mutationType] || "#000",
 }));
 
 interface MutationTableProps {
@@ -125,7 +137,17 @@ export default function MutationTable({ rows }: MutationTableProps) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  function extractSessionFromMutation(mutation: Mutation): Session {
+    if (mutation.mutationType === "SessionAdded") {
+      return mutation.mutationData;
+    } else if (mutation.mutationType === "SessionUpdated") {
+      // Typecast mutation.mutationData to SessionUpdatedMutation
+      const sessionUpdatedMutation = mutation as SessionUpdatedMutation;
+      return sessionUpdatedMutation.mutationData.new;
+    } else {
+      throw new Error("Invalid mutation type");
+    }
+  }
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
@@ -133,6 +155,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
           <TableRow>
             <TableCell>Session ID</TableCell>
             <TableCell>Session Title</TableCell>
+            <TableCell>Session Type</TableCell>
             <TableCell>Mutation Type</TableCell>
             <TableCell>Mutation Time</TableCell>
           </TableRow>
@@ -141,24 +164,30 @@ export default function MutationTable({ rows }: MutationTableProps) {
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
-          ).map((row) => (
-            <StyledTableRow key={row.sessionID}>
-              <TableCell component="th" scope="row">
-                {row.sessionID}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.sessionTitle}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                <MutationTypeText mutationType={row.mutationType}>
-                  {row.mutationType}
-                </MutationTypeText>
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {row.mutationDateTime}
-              </TableCell>
-            </StyledTableRow>
-          ))}
+          ).map((row) => {
+            const session = extractSessionFromMutation(row);
+            return (
+              <StyledTableRow key={session.thirdPartyID + row.mutationDateTime}>
+                <TableCell component="th" scope="row">
+                  {session.thirdPartyID}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {session.title}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {session.trackName}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  <MutationTypeText mutationType={row.mutationType}>
+                    {mutationDisplayNameMapping[row.mutationType]}
+                  </MutationTypeText>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {convertISO8601ToCustomFormat(row.mutationDateTime)}
+                </TableCell>
+              </StyledTableRow>
+            );
+          })}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
               <TableCell colSpan={6} />

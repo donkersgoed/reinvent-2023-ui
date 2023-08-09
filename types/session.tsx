@@ -3,4 +3,8 @@ export interface Session {
   level: string;
   thirdPartyID: string;
   sessionType: string;
+  trackName: string;
+  topics: string[];
+  roles: string[];
+  services: string[];
 }
