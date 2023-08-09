@@ -110,7 +110,7 @@ interface MutationTypeTextProps {
 
 const MutationTypeText = styled("div")<MutationTypeTextProps>(({ mutationType }) => ({
   borderRadius: "15px",
-  padding: "2px",
+  padding: "6px",
   alignContent: "center",
   backgroundColor: colorMapping[mutationType] || "#f0f0f0",
   textAlign: "center",
@@ -137,6 +137,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   function extractSessionFromMutation(mutation: Mutation): Session {
     if (mutation.mutationType === "SessionAdded" || mutation.mutationType === "SessionRemoved") {
       return mutation.mutationData;
@@ -148,15 +149,15 @@ export default function MutationTable({ rows }: MutationTableProps) {
       throw new Error("Invalid mutation type");
     }
   }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
-            <TableCell>Session ID</TableCell>
-            <TableCell>Session Title</TableCell>
+            <TableCell>Session</TableCell>
             <TableCell>Session Type</TableCell>
-            <TableCell>Mutation Type</TableCell>
+            <TableCell align="center">Mutation Type</TableCell>
             <TableCell>Mutation Time</TableCell>
           </TableRow>
         </TableHead>
@@ -169,10 +170,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
             return (
               <StyledTableRow key={session.thirdPartyID + row.mutationDateTime}>
                 <TableCell component="th" scope="row">
-                  {session.thirdPartyID}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {session.title}
+                  {session.thirdPartyID}: {session.title}
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {session.trackName}
