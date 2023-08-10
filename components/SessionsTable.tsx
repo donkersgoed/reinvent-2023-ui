@@ -122,6 +122,24 @@ export default function SessionTable({ rows }: SessionTableProps) {
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
+              colSpan={5}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: {
+                  "aria-label": "rows per page",
+                },
+                native: true,
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+          <TableRow>
             <TableCell>Session ID</TableCell>
             <TableCell>Title</TableCell>
             <TableCell>Session Type</TableCell>
@@ -152,7 +170,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
           ))}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+              <TableCell colSpan={5} />
             </TableRow>
           )}
         </TableBody>
@@ -160,7 +178,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-              colSpan={3}
+              colSpan={5}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}

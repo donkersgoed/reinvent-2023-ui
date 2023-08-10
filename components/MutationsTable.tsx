@@ -155,6 +155,24 @@ export default function MutationTable({ rows }: MutationTableProps) {
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
+            <TablePagination
+              rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
+              colSpan={4}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: {
+                  "aria-label": "rows per page",
+                },
+                native: true,
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              ActionsComponent={TablePaginationActions}
+            />
+          </TableRow>
+          <TableRow>
             <TableCell>Session</TableCell>
             <TableCell>Session Type</TableCell>
             <TableCell align="center">Mutation Type</TableCell>
@@ -196,7 +214,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
           <TableRow>
             <TablePagination
               rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-              colSpan={3}
+              colSpan={4}
               count={rows.length}
               rowsPerPage={rowsPerPage}
               page={page}
