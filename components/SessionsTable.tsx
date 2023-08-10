@@ -2,6 +2,7 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
+import Typography from "@mui/material/Typography";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
@@ -98,6 +99,24 @@ export default function SessionTable({ rows }: SessionTableProps) {
     setPage(0);
   };
 
+  function renderServices(services: string[]): JSX.Element {
+    // if services is an empty list, return "-"
+    if (services.length === 0) {
+      return <span />;
+    }
+
+    return (
+      <span>
+        {services.map((service, index) => (
+          <React.Fragment key={index}>
+            {service}
+            <br />
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
@@ -106,6 +125,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
             <TableCell>Session ID</TableCell>
             <TableCell>Title</TableCell>
             <TableCell>Session Type</TableCell>
+            <TableCell>Services</TableCell>
             <TableCell>Level</TableCell>
           </TableRow>
         </TableHead>
@@ -113,18 +133,21 @@ export default function SessionTable({ rows }: SessionTableProps) {
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
-          ).map((row) => (
-            <TableRow key={row.thirdPartyID}>
+          ).map((session) => (
+            <TableRow key={session.thirdPartyID}>
               <TableCell component="th" scope="row">
-                {row.thirdPartyID}
+                {session.thirdPartyID}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.title}
+                {session.title}
               </TableCell>
               <TableCell component="th" scope="row">
-                {row.trackName}
+                {session.trackName}
               </TableCell>
-              <TableCell style={{ width: 160 }}>{row.level}</TableCell>
+              <TableCell component="th" scope="row">
+                {renderServices(session.services)}
+              </TableCell>
+              <TableCell style={{ width: 160 }}>{session.level}</TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
