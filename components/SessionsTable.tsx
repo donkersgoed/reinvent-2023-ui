@@ -165,25 +165,9 @@ export default function SessionTable({ rows }: SessionTableProps) {
 
   return (
     <div>
-      <PaginationTableRow>
-        <TablePagination
-          rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-          colSpan={5}
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          SelectProps={{
-            inputProps: {
-              "aria-label": "rows per page",
-            },
-            native: true,
-          }}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={TablePaginationActions}
-        />
-      </PaginationTableRow>
-      <TableContainer style={{ maxHeight: "calc(100dvh - 170px" }}>
+      <TableContainer
+        style={{ minHeight: "calc(100dvh - 116px", maxHeight: "calc(100dvh - 116px" }}
+      >
         <Table aria-label="custom pagination table" stickyHeader>
           <TableHead>
             <TableRow>
@@ -191,7 +175,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
               <StyledTableCell>Title</StyledTableCell>
               <StyledTableCell>Session Type</StyledTableCell>
               <StyledTableCell>Services</StyledTableCell>
-              <StyledTableCell align="right">Level</StyledTableCell>
+              <StyledTableCell align="center">Level</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -212,7 +196,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
                 <TableCell component="th" scope="row">
                   {renderServices(session.services)}
                 </TableCell>
-                <TableCell style={{ width: 80 }} align="right">
+                <TableCell style={{ width: 80 }} align="center">
                   <LevelText level={session.level}> {session.level} </LevelText>
                 </TableCell>
               </StyledTableRow>
@@ -225,7 +209,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
           </TableBody>
         </Table>
       </TableContainer>
-      <PaginationTableRow>
+      <PaginationTableRow sx={{ justifyContent: "flex-end", display: "flex" }}>
         <TablePagination
           rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
           colSpan={4}

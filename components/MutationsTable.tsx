@@ -161,25 +161,9 @@ export default function MutationTable({ rows }: MutationTableProps) {
 
   return (
     <div>
-      <PaginationTableRow>
-        <TablePagination
-          rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-          colSpan={4}
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          SelectProps={{
-            inputProps: {
-              "aria-label": "rows per page",
-            },
-            native: true,
-          }}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          ActionsComponent={TablePaginationActions}
-        />
-      </PaginationTableRow>
-      <TableContainer style={{ maxHeight: "calc(100vh - 170px" }}>
+      <TableContainer
+        style={{ minHeight: "calc(100dvh - 116px", maxHeight: "calc(100dvh - 116px" }}
+      >
         <Table aria-label="custom pagination table" stickyHeader>
           <TableHead>
             <TableRow>
