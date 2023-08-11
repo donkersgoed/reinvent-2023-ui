@@ -19,7 +19,7 @@ export default function Layout({ title, ...props }: LayoutProps & React.Componen
         <CssBaseline />
         <Navbar title={title} />
 
-        <Box component="main" flex={1} overflow="auto" height={"calc(100vh - 64px)"}>
+        <Box component="main" flex={1} overflow="auto" height={"calc(100dvh - 64px)"}>
           {props.children}
         </Box>
       </Box>

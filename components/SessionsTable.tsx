@@ -183,7 +183,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
           ActionsComponent={TablePaginationActions}
         />
       </PaginationTableRow>
-      <TableContainer style={{ maxHeight: "calc(100vh - 170px" }}>
+      <TableContainer style={{ maxHeight: "calc(100dvh - 170px" }}>
         <Table aria-label="custom pagination table" stickyHeader>
           <TableHead>
             <TableRow>
