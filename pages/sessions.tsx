@@ -1,15 +1,13 @@
 import * as React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
 import SessionsTable from "../components/SessionsTable";
 
 import { Session } from "../types/session";
 import { getSessions } from "../lib/api";
-import Link from "next/link";
+import Layout from "@/components/Layout";
 
 const theme = createTheme();
 
@@ -25,30 +23,10 @@ export default function SessionList() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-
-      <main>
-        <Box
-          sx={{
-            bgcolor: "background.paper",
-            pt: 8,
-          }}
-        >
-          <Container maxWidth="sm">
-            <Typography component="h1" variant="h2" align="center" color="text.primary">
-              Session list
-            </Typography>
-            <Typography component="p" variant="h6" align="center" color="text.primary" gutterBottom>
-              [jump to <Link href="/mutations">mutations</Link>]
-            </Typography>
-          </Container>
-        </Box>
-
-        <Container sx={{ py: 8 }} maxWidth="lg">
-          {isLoading ? <Typography>Loading...</Typography> : <SessionsTable rows={allSessions} />}
-        </Container>
-      </main>
-    </ThemeProvider>
+    <Layout title="Sessions">
+      <Container sx={{ pt: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
+        {isLoading ? <Typography>Loading...</Typography> : <SessionsTable rows={allSessions} />}
+      </Container>
+    </Layout>
   );
 }

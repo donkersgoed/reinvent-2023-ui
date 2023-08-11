@@ -6,10 +6,8 @@ import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -162,86 +160,86 @@ export default function MutationTable({ rows }: MutationTableProps) {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableHead>
-          <PaginationTableRow>
-            <TablePagination
-              rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-              colSpan={4}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </PaginationTableRow>
-          <TableRow>
-            <StyledTableCell>Session</StyledTableCell>
-            <StyledTableCell>Session Type</StyledTableCell>
-            <StyledTableCell align="center">Mutation Type</StyledTableCell>
-            <StyledTableCell>Mutation Time</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row) => {
-            const session = extractSessionFromMutation(row);
-            return (
-              <StyledTableRow key={session.thirdPartyID + row.mutationDateTime}>
-                <TableCell component="th" scope="row">
-                  {session.thirdPartyID}: {session.title}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {session.trackName}
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  <MutationTypeText mutationType={row.mutationType}>
-                    {mutationDisplayNameMapping[row.mutationType]}
-                  </MutationTypeText>
-                </TableCell>
-                <TableCell component="th" scope="row">
-                  {convertISO8601ToCustomFormat(row.mutationDateTime)}
-                </TableCell>
-              </StyledTableRow>
-            );
-          })}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
+    <div>
+      <PaginationTableRow>
+        <TablePagination
+          rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
+          colSpan={4}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              "aria-label": "rows per page",
+            },
+            native: true,
+          }}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
+      </PaginationTableRow>
+      <TableContainer style={{ maxHeight: "calc(100vh - 170px" }}>
+        <Table aria-label="custom pagination table" stickyHeader>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Session</StyledTableCell>
+              <StyledTableCell>Session Type</StyledTableCell>
+              <StyledTableCell align="center">Mutation Type</StyledTableCell>
+              <StyledTableCell>Mutation Time</StyledTableCell>
             </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <PaginationTableRow>
-            <TablePagination
-              rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-              colSpan={4}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </PaginationTableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((row) => {
+              const session = extractSessionFromMutation(row);
+              return (
+                <StyledTableRow key={session.thirdPartyID + row.mutationDateTime}>
+                  <TableCell component="th" scope="row">
+                    {session.thirdPartyID}: {session.title}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {session.trackName}
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <MutationTypeText mutationType={row.mutationType}>
+                      {mutationDisplayNameMapping[row.mutationType]}
+                    </MutationTypeText>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    {convertISO8601ToCustomFormat(row.mutationDateTime)}
+                  </TableCell>
+                </StyledTableRow>
+              );
+            })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <PaginationTableRow>
+        <TablePagination
+          rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
+          colSpan={4}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              "aria-label": "rows per page",
+            },
+            native: true,
+          }}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
+      </PaginationTableRow>
+    </div>
   );
 }

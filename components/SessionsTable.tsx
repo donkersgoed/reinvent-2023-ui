@@ -164,85 +164,85 @@ export default function SessionTable({ rows }: SessionTableProps) {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableHead>
-          <PaginationTableRow>
-            <TablePagination
-              rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-              colSpan={5}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </PaginationTableRow>
-          <TableRow>
-            <StyledTableCell>Session ID</StyledTableCell>
-            <StyledTableCell>Title</StyledTableCell>
-            <StyledTableCell>Session Type</StyledTableCell>
-            <StyledTableCell>Services</StyledTableCell>
-            <StyledTableCell align="right">Level</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((session) => (
-            <StyledTableRow key={session.thirdPartyID}>
-              <TableCell component="th" scope="row">
-                {session.thirdPartyID}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {session.title}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {session.trackName}
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {renderServices(session.services)}
-              </TableCell>
-              <TableCell style={{ width: 80 }} align="right">
-                <LevelText level={session.level}> {session.level} </LevelText>
-              </TableCell>
-            </StyledTableRow>
-          ))}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={5} />
+    <div>
+      <PaginationTableRow>
+        <TablePagination
+          rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
+          colSpan={5}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              "aria-label": "rows per page",
+            },
+            native: true,
+          }}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
+      </PaginationTableRow>
+      <TableContainer style={{ maxHeight: "calc(100vh - 170px" }}>
+        <Table aria-label="custom pagination table" stickyHeader>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell>Session ID</StyledTableCell>
+              <StyledTableCell>Title</StyledTableCell>
+              <StyledTableCell>Session Type</StyledTableCell>
+              <StyledTableCell>Services</StyledTableCell>
+              <StyledTableCell align="right">Level</StyledTableCell>
             </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <PaginationTableRow>
-            <TablePagination
-              rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
-              colSpan={5}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  "aria-label": "rows per page",
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </PaginationTableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {(rowsPerPage > 0
+              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : rows
+            ).map((session) => (
+              <StyledTableRow key={session.thirdPartyID}>
+                <TableCell component="th" scope="row">
+                  {session.thirdPartyID}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {session.title}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {session.trackName}
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {renderServices(session.services)}
+                </TableCell>
+                <TableCell style={{ width: 80 }} align="right">
+                  <LevelText level={session.level}> {session.level} </LevelText>
+                </TableCell>
+              </StyledTableRow>
+            ))}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 53 * emptyRows }}>
+                <TableCell colSpan={5} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <PaginationTableRow>
+        <TablePagination
+          rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
+          colSpan={4}
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          SelectProps={{
+            inputProps: {
+              "aria-label": "rows per page",
+            },
+            native: true,
+          }}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
+      </PaginationTableRow>
+    </div>
   );
 }
