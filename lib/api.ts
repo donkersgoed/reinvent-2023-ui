@@ -1,8 +1,7 @@
-// const ROOT = "mzr7s3r3e8.execute-api.eu-west-1.amazonaws.com/prod";
-const ROOT = "api.reinvent23.l15d.com";
+const ROOT = "mzr7s3r3e8.execute-api.eu-west-1.amazonaws.com/prod";
+// const ROOT = "api.reinvent23.l15d.com";
 
 export async function getSessions() {
-  console.log("getSessions");
   const API_URL = `https://${ROOT}/sessions`;
   const headers = { "Content-Type": "application/json" };
 
@@ -15,7 +14,6 @@ export async function getSessions() {
   return sessionsJson.sessions;
 }
 export async function getMutations() {
-  console.log("getMutations");
   const API_URL = `https://${ROOT}/mutations`;
   const headers = { "Content-Type": "application/json" };
 

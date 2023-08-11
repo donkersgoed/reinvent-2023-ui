@@ -8,14 +8,21 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MutationsTable from "../components/MutationsTable";
 
 import { Mutation } from "../types/mutation";
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import { getMutations } from "../lib/api";
+import Link from "next/link";
 
 const theme = createTheme();
 
-export default function MutationList({
-  allMutations,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function MutationList() {
+  const [allMutations, setAllMutations] = React.useState<Mutation[]>([]);
+  const [isLoading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    getMutations().then((data) => {
+      setAllMutations(data);
+      setLoading(false);
+    });
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -39,21 +46,17 @@ export default function MutationList({
               Mutations
             </Typography>
             <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Find a list of all mutations of Re:Invent 2023 sessions below.
+              Find a list of all session updates below
+            </Typography>
+            <Typography component="p" variant="h6" align="center" color="text.primary" gutterBottom>
+              [jump to <Link href="/sessions">sessions</Link>]
             </Typography>
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="lg">
-          <MutationsTable rows={allMutations} />
+          {isLoading ? <Typography>Loading...</Typography> : <MutationsTable rows={allMutations} />}
         </Container>
       </main>
     </ThemeProvider>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<{
-  allMutations: Mutation[];
-}> = async () => {
-  const allMutations = await getMutations();
-  return { props: { allMutations } };
-};
