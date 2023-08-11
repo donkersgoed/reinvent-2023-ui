@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
@@ -87,6 +87,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const PaginationTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: "#EEE",
+}));
+
 const colorMapping = {
   SessionAdded: "#8ED28E",
   SessionUpdated: "#85C1E9",
@@ -154,7 +168,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
-          <TableRow>
+          <PaginationTableRow>
             <TablePagination
               rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
               colSpan={4}
@@ -171,12 +185,12 @@ export default function MutationTable({ rows }: MutationTableProps) {
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
-          </TableRow>
+          </PaginationTableRow>
           <TableRow>
-            <TableCell>Session</TableCell>
-            <TableCell>Session Type</TableCell>
-            <TableCell align="center">Mutation Type</TableCell>
-            <TableCell>Mutation Time</TableCell>
+            <StyledTableCell>Session</StyledTableCell>
+            <StyledTableCell>Session Type</StyledTableCell>
+            <StyledTableCell align="center">Mutation Type</StyledTableCell>
+            <StyledTableCell>Mutation Time</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -211,7 +225,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
           )}
         </TableBody>
         <TableFooter>
-          <TableRow>
+          <PaginationTableRow>
             <TablePagination
               rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
               colSpan={4}
@@ -228,7 +242,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
-          </TableRow>
+          </PaginationTableRow>
         </TableFooter>
       </Table>
     </TableContainer>

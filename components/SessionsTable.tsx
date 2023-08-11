@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
@@ -74,6 +74,30 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     </Box>
   );
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const PaginationTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: "#EEE",
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const colorMapping = {
   "100": "#FF0",
@@ -146,7 +170,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
-          <TableRow>
+          <PaginationTableRow>
             <TablePagination
               rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
               colSpan={5}
@@ -163,13 +187,13 @@ export default function SessionTable({ rows }: SessionTableProps) {
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
-          </TableRow>
+          </PaginationTableRow>
           <TableRow>
-            <TableCell>Session ID</TableCell>
-            <TableCell>Title</TableCell>
-            <TableCell>Session Type</TableCell>
-            <TableCell>Services</TableCell>
-            <TableCell align="right">Level</TableCell>
+            <StyledTableCell>Session ID</StyledTableCell>
+            <StyledTableCell>Title</StyledTableCell>
+            <StyledTableCell>Session Type</StyledTableCell>
+            <StyledTableCell>Services</StyledTableCell>
+            <StyledTableCell align="right">Level</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -177,7 +201,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((session) => (
-            <TableRow key={session.thirdPartyID}>
+            <StyledTableRow key={session.thirdPartyID}>
               <TableCell component="th" scope="row">
                 {session.thirdPartyID}
               </TableCell>
@@ -193,7 +217,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
               <TableCell style={{ width: 80 }} align="right">
                 <LevelText level={session.level}> {session.level} </LevelText>
               </TableCell>
-            </TableRow>
+            </StyledTableRow>
           ))}
           {emptyRows > 0 && (
             <TableRow style={{ height: 53 * emptyRows }}>
@@ -202,7 +226,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
           )}
         </TableBody>
         <TableFooter>
-          <TableRow>
+          <PaginationTableRow>
             <TablePagination
               rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
               colSpan={5}
@@ -219,7 +243,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
             />
-          </TableRow>
+          </PaginationTableRow>
         </TableFooter>
       </Table>
     </TableContainer>
