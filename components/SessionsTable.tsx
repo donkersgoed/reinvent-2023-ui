@@ -1,8 +1,7 @@
 import * as React from "react";
-import { useTheme } from "@mui/material/styles";
+import { useTheme, styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
-import Typography from "@mui/material/Typography";
 import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableCell from "@mui/material/TableCell";
@@ -16,8 +15,6 @@ import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
-
-import type { InferGetServerSidePropsType, GetStaticProps } from "next";
 
 import { Session } from "../types/session";
 
@@ -77,6 +74,34 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     </Box>
   );
 }
+
+const colorMapping = {
+  "100": "#FF0",
+  "200": "#8ED28E",
+  "300": "#85C1E9",
+  "400": "#A569BD",
+};
+const textColorMapping = {
+  "100": "#000",
+  "200": "#000",
+  "300": "#000",
+  "400": "#FFF",
+};
+
+type Level = keyof typeof colorMapping;
+
+interface LevelTextProps {
+  level: Level;
+}
+
+const LevelText = styled("div")<LevelTextProps>(({ level }) => ({
+  borderRadius: "15px",
+  padding: "6px",
+  alignContent: "center",
+  backgroundColor: colorMapping[level] || "#f0f0f0",
+  textAlign: "center",
+  color: textColorMapping[level] || "#000",
+}));
 
 interface SessionTableProps {
   rows: Session[];
@@ -144,7 +169,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
             <TableCell>Title</TableCell>
             <TableCell>Session Type</TableCell>
             <TableCell>Services</TableCell>
-            <TableCell>Level</TableCell>
+            <TableCell align="right">Level</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -165,7 +190,9 @@ export default function SessionTable({ rows }: SessionTableProps) {
               <TableCell component="th" scope="row">
                 {renderServices(session.services)}
               </TableCell>
-              <TableCell style={{ width: 160 }}>{session.level}</TableCell>
+              <TableCell style={{ width: 80 }} align="right">
+                <LevelText level={session.level}> {session.level} </LevelText>
+              </TableCell>
             </TableRow>
           ))}
           {emptyRows > 0 && (
