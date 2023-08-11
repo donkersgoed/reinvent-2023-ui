@@ -33,21 +33,11 @@ export default function SessionList() {
           sx={{
             bgcolor: "background.paper",
             pt: 8,
-            pb: 2,
           }}
         >
           <Container maxWidth="sm">
-            <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="text.primary"
-              gutterBottom
-            >
+            <Typography component="h1" variant="h2" align="center" color="text.primary">
               Session list
-            </Typography>
-            <Typography variant="h5" align="center" color="text.secondary" paragraph>
-              Find a list of all sessions at Re:Invent 2023 below
             </Typography>
             <Typography component="p" variant="h6" align="center" color="text.primary" gutterBottom>
               [jump to <Link href="/mutations">mutations</Link>]

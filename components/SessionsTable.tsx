@@ -17,6 +17,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import LastPageIcon from "@mui/icons-material/LastPage";
 
 import { Session } from "../types/session";
+import PaginationTableRow from "./PaginationTableRow";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -83,10 +84,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
-}));
-
-const PaginationTableRow = styled(TableRow)(({ theme }) => ({
-  backgroundColor: "#EEE",
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({

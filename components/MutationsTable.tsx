@@ -19,6 +19,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { Mutation, SessionUpdatedMutation } from "../types/mutation";
 import { Session } from "../types/session";
 import { convertISO8601ToCustomFormat } from "@/lib/time";
+import PaginationTableRow from "./PaginationTableRow";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -95,10 +96,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
-}));
-
-const PaginationTableRow = styled(TableRow)(({ theme }) => ({
-  backgroundColor: "#EEE",
 }));
 
 const colorMapping = {
