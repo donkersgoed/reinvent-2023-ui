@@ -30,7 +30,7 @@ export default function MutationList() {
         <Navbar title={"Mutations"} />
         <Container sx={{ py: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
           {isLoading ? (
-            <Typography variant="h4" component="h1" sx={{ py: 4 }}>
+            <Typography variant="h4" component="h1" sx={{ px: 2, py: 4 }}>
               Loading...
             </Typography>
           ) : (
