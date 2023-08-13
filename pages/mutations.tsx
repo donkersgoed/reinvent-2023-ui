@@ -29,7 +29,13 @@ export default function MutationList() {
       <FilterAndColumnsProvider>
         <Navbar title={"Mutations"} />
         <Container sx={{ py: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
-          {isLoading ? <Typography>Loading...</Typography> : <MutationsTable rows={allMutations} />}
+          {isLoading ? (
+            <Typography variant="h4" component="h1" sx={{ py: 4 }}>
+              Loading...
+            </Typography>
+          ) : (
+            <MutationsTable rows={allMutations} />
+          )}
         </Container>
       </FilterAndColumnsProvider>
     </Layout>

@@ -29,7 +29,13 @@ export default function SessionList() {
       <FilterAndColumnsProvider>
         <Navbar title={"Sessions"} />
         <Container sx={{ pt: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
-          {isLoading ? <Typography>Loading...</Typography> : <SessionsTable rows={allSessions} />}
+          {isLoading ? (
+            <Typography variant="h4" component="h1" sx={{ py: 4 }}>
+              Loading...
+            </Typography>
+          ) : (
+            <SessionsTable rows={allSessions} />
+          )}
         </Container>
       </FilterAndColumnsProvider>
     </Layout>
