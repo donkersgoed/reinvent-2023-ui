@@ -6,10 +6,8 @@ import TableBody from "@mui/material/TableBody";
 import TableHead from "@mui/material/TableHead";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableFooter from "@mui/material/TableFooter";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -18,6 +16,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 
 import { Session } from "../types/session";
 import PaginationTableRow from "./PaginationTableRow";
+import { FilterAndColumnsContext } from "@/contexts/FilterAndColumnsContext";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -129,10 +128,17 @@ interface SessionTableProps {
 }
 export default function SessionTable({ rows }: SessionTableProps) {
   const [page, setPage] = React.useState(0);
+  const { filters } = React.useContext(FilterAndColumnsContext);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  const filteredRows = rows.filter((session) => {
+    return filters.level.options[session.level];
+    // && filters.sessionType.options[session.sessionType]
+    // Add other filter checks here
+  });
+
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filteredRows.length) : 0;
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -166,7 +172,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
   return (
     <div>
       <TableContainer
-        style={{ minHeight: "calc(100dvh - 116px", maxHeight: "calc(100dvh - 116px" }}
+        style={{ minHeight: "calc(100dvh - 117px", maxHeight: "calc(100dvh - 117px" }}
       >
         <Table aria-label="custom pagination table" stickyHeader>
           <TableHead>
@@ -180,8 +186,8 @@ export default function SessionTable({ rows }: SessionTableProps) {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : rows
+              ? filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              : filteredRows
             ).map((session) => (
               <StyledTableRow key={session.thirdPartyID}>
                 <TableCell component="th" scope="row">
@@ -213,7 +219,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
         <TablePagination
           rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
           colSpan={4}
-          count={rows.length}
+          count={filteredRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           SelectProps={{

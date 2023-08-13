@@ -8,6 +8,8 @@ import SessionsTable from "../components/SessionsTable";
 import { Session } from "../types/session";
 import { getSessions } from "../lib/api";
 import Layout from "@/components/Layout";
+import Navbar from "@/components//Navbar";
+import { FilterAndColumnsProvider } from "@/contexts/FilterAndColumnsContext";
 
 const theme = createTheme();
 
@@ -23,10 +25,13 @@ export default function SessionList() {
   }, []);
 
   return (
-    <Layout title="Sessions">
-      <Container sx={{ pt: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
-        {isLoading ? <Typography>Loading...</Typography> : <SessionsTable rows={allSessions} />}
-      </Container>
+    <Layout>
+      <FilterAndColumnsProvider>
+        <Navbar title={"Sessions"} />
+        <Container sx={{ pt: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
+          {isLoading ? <Typography>Loading...</Typography> : <SessionsTable rows={allSessions} />}
+        </Container>
+      </FilterAndColumnsProvider>
     </Layout>
   );
 }

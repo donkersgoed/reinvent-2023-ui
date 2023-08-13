@@ -8,8 +8,9 @@ import MutationsTable from "../components/MutationsTable";
 
 import { Mutation } from "../types/mutation";
 import { getMutations } from "../lib/api";
-import Link from "next/link";
+import Navbar from "@/components//Navbar";
 import Layout from "@/components/Layout";
+import { FilterAndColumnsProvider } from "@/contexts/FilterAndColumnsContext";
 
 const theme = createTheme();
 
@@ -24,10 +25,13 @@ export default function MutationList() {
     });
   }, []);
   return (
-    <Layout title="Mutations">
-      <Container sx={{ py: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
-        {isLoading ? <Typography>Loading...</Typography> : <MutationsTable rows={allMutations} />}
-      </Container>
+    <Layout>
+      <FilterAndColumnsProvider>
+        <Navbar title={"Mutations"} />
+        <Container sx={{ py: 0, px: 0 }} maxWidth={"lg"} disableGutters={true}>
+          {isLoading ? <Typography>Loading...</Typography> : <MutationsTable rows={allMutations} />}
+        </Container>
+      </FilterAndColumnsProvider>
     </Layout>
   );
 }

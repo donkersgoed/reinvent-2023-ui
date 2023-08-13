@@ -18,6 +18,7 @@ import { Mutation, SessionUpdatedMutation } from "../types/mutation";
 import { Session } from "../types/session";
 import { convertISO8601ToCustomFormat } from "@/lib/time";
 import PaginationTableRow from "./PaginationTableRow";
+import { FilterAndColumnsContext } from "@/contexts/FilterAndColumnsContext";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -131,6 +132,7 @@ interface MutationTableProps {
 }
 export default function MutationTable({ rows }: MutationTableProps) {
   const [page, setPage] = React.useState(0);
+  const { filters } = React.useContext(FilterAndColumnsContext);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -147,6 +149,14 @@ export default function MutationTable({ rows }: MutationTableProps) {
     setPage(0);
   };
 
+  const filteredRows = rows.filter((mutations) => {
+    const session = extractSessionFromMutation(mutations);
+
+    return filters.level.options[session.level];
+    // && filters.sessionType.options[session.sessionType]
+    // Add other filter checks here
+  });
+
   function extractSessionFromMutation(mutation: Mutation): Session {
     if (mutation.mutationType === "SessionAdded" || mutation.mutationType === "SessionRemoved") {
       return mutation.mutationData;
@@ -162,7 +172,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
   return (
     <div>
       <TableContainer
-        style={{ minHeight: "calc(100dvh - 116px", maxHeight: "calc(100dvh - 116px" }}
+        style={{ minHeight: "calc(100dvh - 117px", maxHeight: "calc(100dvh - 117px" }}
       >
         <Table aria-label="custom pagination table" stickyHeader>
           <TableHead>
@@ -175,7 +185,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ? filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : rows
             ).map((row) => {
               const session = extractSessionFromMutation(row);
@@ -210,7 +220,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
         <TablePagination
           rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
           colSpan={4}
-          count={rows.length}
+          count={filteredRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           SelectProps={{
