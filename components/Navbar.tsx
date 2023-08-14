@@ -18,6 +18,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { FilterAndColumnsContext } from "@/contexts/FilterAndColumnsContext";
 import { Filters } from "@/types/filtersAndColumns";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface AppBarProps {
   title: string;
@@ -194,6 +195,17 @@ export default function ButtonAppBar({ title }: AppBarProps) {
               >
                 (reset)
               </Typography>
+              <Box flexGrow={1} />
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="close-filters"
+                sx={{ mr: 1 }}
+                onClick={handleClose}
+              >
+                <CloseIcon />
+              </IconButton>
             </Box>
 
             {Object.keys(filters).map((filterKey) => {
