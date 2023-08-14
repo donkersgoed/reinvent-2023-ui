@@ -18,7 +18,7 @@ import { Mutation, SessionUpdatedMutation } from "../types/mutation";
 import { Session } from "../types/session";
 import { convertISO8601ToCustomFormat } from "@/lib/time";
 import PaginationTableRow from "./PaginationTableRow";
-import { FilterAndColumnsContext } from "@/contexts/FilterAndColumnsContext";
+import { FilterAndColumnsContext, filterkeys } from "@/contexts/FilterAndColumnsContext";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -151,10 +151,51 @@ export default function MutationTable({ rows }: MutationTableProps) {
 
   const filteredRows = rows.filter((mutations) => {
     const session = extractSessionFromMutation(mutations);
+    let sessionIncluded = true;
 
-    return filters.level.options[session.level];
-    // && filters.sessionType.options[session.sessionType]
-    // Add other filter checks here
+    filterkeys.forEach((filterkey) => {
+      if (!sessionIncluded) {
+        // Exit the forEach loop early when a reason to exclude
+        // the session has already been found.
+        return;
+      }
+
+      // Get a list of enabled filter options from the filter context.
+      const enabledFilterOptions = Object.keys(
+        filters[filterkey as keyof typeof filters].options
+      ).filter((option) => filters[filterkey as keyof typeof filters].options[option] === true);
+
+      if (enabledFilterOptions.length == 0) {
+        // no filter options were found, always return true.
+        return true;
+      }
+
+      if (
+        enabledFilterOptions.length ==
+        Object.keys(filters[filterkey as keyof typeof filters].options).length
+      ) {
+        // No custom filtering for this filter key, so return true.
+        return true;
+      }
+
+      // Check which filter values (e.g. level 200, or "chalk talk") are present for this session.
+      const filterKeysForSession = session[filterkey as keyof Session];
+
+      // Convert single strings to a list of strings.
+      let filterKeysForSessionList: string[] = [];
+      if (Array.isArray(filterKeysForSession)) {
+        filterKeysForSessionList = filterKeysForSession;
+      } else {
+        filterKeysForSessionList.push(filterKeysForSession);
+      }
+
+      // If none of the filters in enabledFilterOptions is present in the filterKeysForSessionList,
+      // return false to filter out the session
+      sessionIncluded = filterKeysForSessionList.some((sessionFilter) =>
+        enabledFilterOptions.includes(sessionFilter)
+      );
+    });
+    return sessionIncluded;
   });
 
   function extractSessionFromMutation(mutation: Mutation): Session {
@@ -218,6 +259,7 @@ export default function MutationTable({ rows }: MutationTableProps) {
       </TableContainer>
       <PaginationTableRow>
         <TablePagination
+          component={"div"}
           rowsPerPageOptions={[10, 50, 100, { label: "All", value: -1 }]}
           colSpan={4}
           count={filteredRows.length}

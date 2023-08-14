@@ -9,7 +9,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useRouter } from "next/navigation";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import Settings from "@mui/icons-material/Settings";
 import Checkbox from "@mui/material/Checkbox";
 import Drawer from "@mui/material/Drawer";
 import Accordion from "@mui/material/Accordion";
@@ -17,7 +16,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { TableRow } from "@mui/material";
 import { FilterAndColumnsContext } from "@/contexts/FilterAndColumnsContext";
 import { Filters } from "@/types/filtersAndColumns";
 
@@ -27,6 +25,7 @@ interface AppBarProps {
 
 export default function ButtonAppBar({ title }: AppBarProps) {
   const { filters, setFilters } = React.useContext(FilterAndColumnsContext);
+  const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const handleFilterCheckboxChange = (filterKey: string, option: string) => {
     setFilters((prevFilters: Filters) => {
@@ -76,6 +75,45 @@ export default function ButtonAppBar({ title }: AppBarProps) {
 
   const handleMutationsMenuClick = () => {
     router.push("/mutations");
+  };
+
+  const handleAccordeonChange =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
+
+  const handleFilterSelectAll = (filterKey: string | null) => {
+    // Create a copy of the filters state
+    const updatedFilters = { ...filters };
+
+    if (filterKey == null) {
+      Object.keys(updatedFilters).forEach((filterKey) => {
+        Object.keys(updatedFilters[filterKey].options).forEach((option) => {
+          updatedFilters[filterKey].options[option] = true;
+        });
+      });
+    } else {
+      // Set all options for the specified filterKey to false
+      Object.keys(updatedFilters[filterKey].options).forEach((option) => {
+        updatedFilters[filterKey].options[option] = true;
+      });
+    }
+
+    // Update the state with the new filters object
+    setFilters(updatedFilters);
+  };
+
+  const handleFilterSelectNone = (filterKey: string) => {
+    // Create a copy of the filters state
+    const updatedFilters = { ...filters };
+
+    // Set all options for the specified filterKey to false
+    Object.keys(updatedFilters[filterKey].options).forEach((option) => {
+      updatedFilters[filterKey].options[option] = false;
+    });
+
+    // Update the state with the new filters object
+    setFilters(updatedFilters);
   };
 
   return (
@@ -131,36 +169,91 @@ export default function ButtonAppBar({ title }: AppBarProps) {
           </Menu>
 
           {/* Filter Drawer */}
-          <Drawer anchor={"right"} open={Boolean(filterMenuAnchorEl)} onClose={handleClose}>
-            <Typography variant="h6" component="div" sx={{ px: 2, py: 1 }}>
-              Filters
-            </Typography>
+          <Drawer
+            anchor={"right"}
+            open={Boolean(filterMenuAnchorEl)}
+            onClose={handleClose}
+            sx={{
+              flexShrink: 0,
+            }}
+          >
+            <Box display={"flex"} flexDirection={"row"}>
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ px: 2, py: 1, my: "auto", verticalAlign: "bottom" }}
+              >
+                Filters
+              </Typography>
+              <Typography
+                variant="body2"
+                component="div"
+                sx={{ px: 2, py: 1, my: "auto", verticalAlign: "bottom" }}
+                onClick={() => handleFilterSelectAll(null)}
+                style={{ cursor: "pointer" }}
+              >
+                (reset)
+              </Typography>
+            </Box>
 
             {Object.keys(filters).map((filterKey) => {
               const filter = filters[filterKey];
               return (
-                <Accordion key={filterKey} disableGutters={true}>
+                <Accordion
+                  expanded={expanded === filterKey}
+                  key={filterKey}
+                  disableGutters={true}
+                  onChange={handleAccordeonChange(filterKey)}
+                  TransitionProps={{
+                    timeout: {
+                      appear: 500,
+                      enter: 300,
+                      exit: 150,
+                    },
+                  }}
+                >
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls={`${filterKey}-content`}
                     id={`${filterKey}-header`}
+                    sx={{
+                      backgroundColor: "rgba(0, 0, 0, 0.03)",
+                      borderBottom: "1px solid rgba(0, 0, 0, 0.1)",
+                    }}
                   >
                     <Typography>{filter.name}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                    {Object.keys(filter.options).map((option) => (
-                      <TableRow key={option}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={filter.options[option]}
-                              onChange={() => handleFilterCheckboxChange(filterKey, option)}
-                            />
-                          }
-                          label={option}
-                        />
-                      </TableRow>
-                    ))}
+                    <Typography variant="body2" sx={{ py: 1 }}>
+                      <a
+                        onClick={() => handleFilterSelectAll(filterKey)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        All
+                      </a>{" "}
+                      -{" "}
+                      <a
+                        onClick={() => handleFilterSelectNone(filterKey)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        None
+                      </a>
+                    </Typography>
+                    {Object.keys(filter.options)
+                      .sort((a, b) => a.localeCompare(b))
+                      .map((option) => (
+                        <Box key={option}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={filter.options[option]}
+                                onChange={() => handleFilterCheckboxChange(filterKey, option)}
+                              />
+                            }
+                            label={option}
+                          />
+                        </Box>
+                      ))}
                   </AccordionDetails>
                 </Accordion>
               );
