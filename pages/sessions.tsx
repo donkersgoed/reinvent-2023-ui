@@ -1,7 +1,6 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
 import Container, { ContainerProps } from "@mui/material/Container";
-import { createTheme } from "@mui/material/styles";
 
 import SessionsTable from "../components/SessionsTable";
 

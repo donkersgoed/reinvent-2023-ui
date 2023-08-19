@@ -22,9 +22,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 interface AppBarProps {
   title: string;
+  nofilters?: boolean;
 }
 
-export default function ButtonAppBar({ title }: AppBarProps) {
+export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
   const { filters, setFilters } = React.useContext(FilterAndColumnsContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
@@ -135,11 +136,13 @@ export default function ButtonAppBar({ title }: AppBarProps) {
             {title}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-
-          <IconButton size="large" aria-label="filter" color="inherit" onClick={handleFilterMenu}>
-            <FilterAltIcon />
-          </IconButton>
-
+          {nofilters !== true ? (
+            <IconButton size="large" aria-label="filter" color="inherit" onClick={handleFilterMenu}>
+              <FilterAltIcon />
+            </IconButton>
+          ) : (
+            <div />
+          )}
           {/* <IconButton
             size="large"
             aria-label="settings"
@@ -189,7 +192,7 @@ export default function ButtonAppBar({ title }: AppBarProps) {
               <Typography
                 variant="body2"
                 component="div"
-                sx={{ px: 2, py: 1, my: "auto", verticalAlign: "bottom" }}
+                sx={{ px: 0, py: 1, my: "auto", verticalAlign: "bottom" }}
                 onClick={() => handleFilterSelectAll(null)}
                 style={{ cursor: "pointer" }}
               >

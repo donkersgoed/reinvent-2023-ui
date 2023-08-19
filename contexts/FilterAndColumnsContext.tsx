@@ -28,12 +28,9 @@ const defaultFilterAndColumnsContextValue: FilterAndColumnsContextValue = {
       options: {},
     },
   },
-  // columns: {},
   setFilters: () => {},
-  // setColumns: () => {},
 };
 
-console.log("-- Create Context");
 const FilterAndColumnsContext = React.createContext<FilterAndColumnsContextValue>(
   defaultFilterAndColumnsContextValue
 );

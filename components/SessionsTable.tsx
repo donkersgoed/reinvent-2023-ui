@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useRouter } from "next/router";
 import { useTheme, styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
@@ -86,6 +87,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  cursor: "pointer",
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
@@ -130,6 +132,8 @@ export default function SessionTable({ rows }: SessionTableProps) {
   const [page, setPage] = React.useState(0);
   const { filters } = React.useContext(FilterAndColumnsContext);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const router = useRouter();
 
   const filteredRows = rows.filter((session) => {
     let sessionIncluded = true;
@@ -211,6 +215,10 @@ export default function SessionTable({ rows }: SessionTableProps) {
     );
   }
 
+  function clickRow(id: string) {
+    router.push(`/sessions/${id}`);
+  }
+
   return (
     <div>
       <TableContainer
@@ -231,7 +239,10 @@ export default function SessionTable({ rows }: SessionTableProps) {
               ? filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : filteredRows
             ).map((session) => (
-              <StyledTableRow key={session.thirdPartyID}>
+              <StyledTableRow
+                key={session.thirdPartyID}
+                onClick={() => clickRow(session.thirdPartyID)}
+              >
                 <TableCell component="th" scope="row">
                   {session.thirdPartyID}
                 </TableCell>
