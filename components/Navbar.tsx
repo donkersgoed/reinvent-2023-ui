@@ -38,7 +38,15 @@ export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
         (option) => !filters[key].options[option]
       );
       localStorage.setItem(`filters.${key}.disabledOptions`, JSON.stringify(disabledOptions));
-      if (disabledOptions.length > 0) activeFilters++;
+
+      // If some options were disabled, but not all options were, this filter is
+      // considered active.
+      if (
+        disabledOptions.length > 0 &&
+        disabledOptions.length != Object.keys(filters[key].options).length
+      ) {
+        activeFilters++;
+      }
     }
     setFiltersActive(activeFilters);
   };

@@ -79,6 +79,7 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
           const options = filtersWithLocalPrefs[key].options;
 
           let filterPrefFound = false;
+          let allOptionsDisabled = true;
           // Iterate over the options in the 'options' dictionary
           for (const optionKey in options) {
             if (localPrefs.hasOwnProperty(key)) {
@@ -87,13 +88,15 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
                 filterPrefFound = true;
               }
             }
+            // If any value is not set to false, at least one option is enabled.
+            if (options[optionKey] !== false) allOptionsDisabled = false;
           }
-          if (filterPrefFound) {
+
+          if (filterPrefFound && !allOptionsDisabled) {
             activeFilters++;
           }
         }
       }
-      console.log(activeFilters);
 
       setFiltersActive(activeFilters);
       setFilters(filtersWithLocalPrefs);
