@@ -89,7 +89,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   cursor: "pointer",
-  "text-decoration": "none",
+  textDecoration: "none",
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
@@ -225,26 +225,24 @@ export default function SessionTable({ rows }: SessionTableProps) {
     );
   }
 
-  function clickRow(id: string) {
-    router.push(`/sessions/${id}`);
-  }
-
   return (
     <div>
       <TableContainer
         style={{ minHeight: "calc(100dvh - 117px", maxHeight: "calc(100dvh - 117px" }}
       >
-        <Table aria-label="custom pagination table" stickyHeader>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Session ID</StyledTableCell>
-              <StyledTableCell>Title</StyledTableCell>
-              <StyledTableCell>Session Type</StyledTableCell>
-              <StyledTableCell>Services</StyledTableCell>
-              <StyledTableCell align="center">Level</StyledTableCell>
+        <Table component={"div"} aria-label="custom pagination table" stickyHeader>
+          <TableHead component={"div"}>
+            <TableRow component={"div"}>
+              <StyledTableCell component={"div"}>Session ID</StyledTableCell>
+              <StyledTableCell component={"div"}>Title</StyledTableCell>
+              <StyledTableCell component={"div"}>Session Type</StyledTableCell>
+              <StyledTableCell component={"div"}>Services</StyledTableCell>
+              <StyledTableCell component={"div"} align="center">
+                Level
+              </StyledTableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody component={"div"}>
             {(rowsPerPage > 0
               ? filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : filteredRows
@@ -254,19 +252,19 @@ export default function SessionTable({ rows }: SessionTableProps) {
                 component={Link}
                 href={`/sessions/${session.thirdPartyID}`}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="div" scope="row">
                   {session.thirdPartyID}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="div" scope="row">
                   {session.title}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="div" scope="row">
                   {session.trackName}
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="div" scope="row">
                   {renderServices(session.services)}
                 </TableCell>
-                <TableCell style={{ width: 80 }} align="center">
+                <TableCell style={{ width: 80 }} component="div" scope="row" align="center">
                   <LevelText level={session.level}> {session.level} </LevelText>
                 </TableCell>
               </SessionItemTableRow>

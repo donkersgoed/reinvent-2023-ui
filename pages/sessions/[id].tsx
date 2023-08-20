@@ -136,7 +136,7 @@ export default function SessionPage() {
           disableGutters={true}
         >
           <Grid container>
-            <Grid xs={12} sx={{ py: 1, px: 1, color: "#FFF", backgroundColor: "#000" }}>
+            <Grid item xs={12} sx={{ py: 1, px: 1, color: "#FFF", backgroundColor: "#000" }}>
               <BackButton
                 variant="text"
                 color="success"
@@ -146,12 +146,12 @@ export default function SessionPage() {
                 Back to session list
               </BackButton>
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <SessionHeader>
                 {sessionAfterLoading.thirdPartyID}: {sessionAfterLoading.title}
               </SessionHeader>
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <SessionSubHeader>
                 Level {sessionAfterLoading.level} {sessionAfterLoading.trackName}
               </SessionSubHeader>

@@ -34,6 +34,11 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
       // Nothing to do
       return;
     }
+    // if (typeof window !== "undefined" && window.localStorage) {
+    //   console.log("Loading filters");
+    //   console.log("Local storage available");
+    //   console.log(JSON.stringify(filters));
+    // }
 
     const addOptionToFilter = (filterName: string, option: string) => {
       const newFilters = { ...filters };
