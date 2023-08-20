@@ -16,6 +16,7 @@ import Button from "@mui/material/Button";
 const BackButton = styled(Button)({
   color: "white",
 });
+
 function SessionHeader({ ...props }: TypographyProps) {
   return (
     <Typography

@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
+import TableRow, { TableRowProps } from "@mui/material/TableRow";
 import IconButton from "@mui/material/IconButton";
 import FirstPageIcon from "@mui/icons-material/FirstPage";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
@@ -18,6 +18,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { Session } from "../types/session";
 import PaginationTableRow from "./PaginationTableRow";
 import { FilterAndColumnsContext, filterkeys } from "@/contexts/FilterAndColumnsContext";
+import Link from "next/link";
 
 interface TablePaginationActionsProps {
   count: number;
@@ -88,6 +89,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   cursor: "pointer",
+  "text-decoration": "none",
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
@@ -96,6 +98,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+
+type LinkProps = {
+  href: string;
+};
+type MergedProps = TableRowProps & LinkProps;
+function SessionItemTableRow({ ...props }: MergedProps) {
+  return <StyledTableRow {...props}>{props.children}</StyledTableRow>;
+}
 
 const colorMapping = {
   "100": "#FF0",
@@ -239,9 +249,10 @@ export default function SessionTable({ rows }: SessionTableProps) {
               ? filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               : filteredRows
             ).map((session) => (
-              <StyledTableRow
+              <SessionItemTableRow
                 key={session.thirdPartyID}
-                onClick={() => clickRow(session.thirdPartyID)}
+                component={Link}
+                href={`/sessions/${session.thirdPartyID}`}
               >
                 <TableCell component="th" scope="row">
                   {session.thirdPartyID}
@@ -258,7 +269,7 @@ export default function SessionTable({ rows }: SessionTableProps) {
                 <TableCell style={{ width: 80 }} align="center">
                   <LevelText level={session.level}> {session.level} </LevelText>
                 </TableCell>
-              </StyledTableRow>
+              </SessionItemTableRow>
             ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
