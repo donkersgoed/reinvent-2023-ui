@@ -194,7 +194,7 @@ export default function SessionPage() {
             <SessionDetail xs={12} md={4}>
               <SessionSubHeader>Areas of Interest</SessionSubHeader>
               <SessionDetailList>
-                {sessionAfterLoading.areas_of_interest.map((areaOfInterest) => (
+                {sessionAfterLoading.areasOfInterest.map((areaOfInterest) => (
                   <SessionDetailListItem key={areaOfInterest} sx={{ display: "list-item" }}>
                     {areaOfInterest}
                   </SessionDetailListItem>

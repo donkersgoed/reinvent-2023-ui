@@ -23,6 +23,10 @@ const defaultFilterAndColumnsContextValue: FilterAndColumnsContextValue = {
       name: "Industries",
       options: {},
     },
+    areasOfInterest: {
+      name: "Areas of Interest",
+      options: {},
+    },
     roles: {
       name: "Roles",
       options: {},
@@ -60,6 +64,10 @@ const FilterAndColumnsProvider = ({ children }: { children: React.ReactNode }) =
     },
     industries: {
       name: "Industries",
+      options: {},
+    },
+    areasOfInterest: {
+      name: "Areas of Interest",
       options: {},
     },
     roles: {

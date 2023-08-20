@@ -9,5 +9,5 @@ export interface Session {
   roles: string[];
   services: string[];
   industries: string[];
-  areas_of_interest: string[];
+  areasOfInterest: string[];
 }
