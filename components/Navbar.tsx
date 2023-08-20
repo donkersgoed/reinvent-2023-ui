@@ -29,6 +29,15 @@ export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
   const { filters, setFilters } = React.useContext(FilterAndColumnsContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
+  const storeFiltersInLocalStorage = (filters: Filters) => {
+    for (const key in filters) {
+      const disabledOptions = Object.keys(filters[key].options).filter(
+        (option) => !filters[key].options[option]
+      );
+      localStorage.setItem(`filters.${key}.disabledOptions`, JSON.stringify(disabledOptions));
+    }
+  };
+
   const handleFilterCheckboxChange = (filterKey: string, option: string) => {
     setFilters((prevFilters: Filters) => {
       const updatedFilters = {
@@ -41,6 +50,8 @@ export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
           },
         },
       };
+
+      storeFiltersInLocalStorage(updatedFilters);
       return updatedFilters;
     });
   };
@@ -102,6 +113,7 @@ export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
     }
 
     // Update the state with the new filters object
+    storeFiltersInLocalStorage(updatedFilters);
     setFilters(updatedFilters);
   };
 
@@ -115,6 +127,7 @@ export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
     });
 
     // Update the state with the new filters object
+    storeFiltersInLocalStorage(updatedFilters);
     setFilters(updatedFilters);
   };
 

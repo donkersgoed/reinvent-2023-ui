@@ -67,7 +67,33 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
     const prevFilters = JSON.stringify(filters);
     const newFilters = fillFilters(allSessions);
     if (prevFilters !== JSON.stringify(newFilters)) {
-      setFilters(newFilters);
+      // Match against locally stored filters.
+      const localPrefs = {} as { [key: string]: string[] };
+      for (const key in newFilters) {
+        const localItem = localStorage.getItem(`filters.${key}.disabledOptions`);
+        if (localItem) {
+          localPrefs[key] = JSON.parse(localItem);
+        }
+      }
+
+      const filtersWithLocalPrefs = { ...newFilters };
+      // Iterate over the keys in the original object
+      for (const key in filtersWithLocalPrefs) {
+        if (filtersWithLocalPrefs.hasOwnProperty(key)) {
+          const options = filtersWithLocalPrefs[key].options;
+
+          // Iterate over the options in the 'options' dictionary
+          for (const optionKey in options) {
+            if (localPrefs.hasOwnProperty(key)) {
+              if (localPrefs[key].includes(optionKey)) {
+                options[optionKey] = false; // Set value to false if it exists in local storage
+              }
+            }
+          }
+        }
+      }
+
+      setFilters(filtersWithLocalPrefs);
     }
     if (allSessions.length > 0) setInitialLoadComplete(true);
   }, [allSessions, filters, setFilters, initialLoadComplete]);
