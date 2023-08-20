@@ -1,6 +1,7 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
+import Badge from "@mui/material/Badge";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -26,16 +27,20 @@ interface AppBarProps {
 }
 
 export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
-  const { filters, setFilters } = React.useContext(FilterAndColumnsContext);
+  const { filters, setFilters, filtersActive, setFiltersActive } =
+    React.useContext(FilterAndColumnsContext);
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const storeFiltersInLocalStorage = (filters: Filters) => {
+    let activeFilters = 0;
     for (const key in filters) {
       const disabledOptions = Object.keys(filters[key].options).filter(
         (option) => !filters[key].options[option]
       );
       localStorage.setItem(`filters.${key}.disabledOptions`, JSON.stringify(disabledOptions));
+      if (disabledOptions.length > 0) activeFilters++;
     }
+    setFiltersActive(activeFilters);
   };
 
   const handleFilterCheckboxChange = (filterKey: string, option: string) => {
@@ -151,7 +156,9 @@ export default function ButtonAppBar({ title, nofilters }: AppBarProps) {
           <Box sx={{ flexGrow: 1 }} />
           {nofilters !== true ? (
             <IconButton size="large" aria-label="filter" color="inherit" onClick={handleFilterMenu}>
-              <FilterAltIcon />
+              <Badge badgeContent={filtersActive} color="primary">
+                <FilterAltIcon />
+              </Badge>
             </IconButton>
           ) : (
             <div />

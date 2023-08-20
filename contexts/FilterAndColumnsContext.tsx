@@ -29,6 +29,8 @@ const defaultFilterAndColumnsContextValue: FilterAndColumnsContextValue = {
     },
   },
   setFilters: () => {},
+  filtersActive: 0,
+  setFiltersActive: () => {},
 };
 
 const FilterAndColumnsContext = React.createContext<FilterAndColumnsContextValue>(
@@ -38,6 +40,7 @@ const FilterAndColumnsContext = React.createContext<FilterAndColumnsContextValue
 const filterkeys: string[] = Object.keys(defaultFilterAndColumnsContextValue.filters);
 
 const FilterAndColumnsProvider = ({ children }: { children: React.ReactNode }) => {
+  const [filtersActive, setFiltersActive] = React.useState(0);
   const [filters, setFilters] = React.useState({
     level: {
       name: "Level",
@@ -66,7 +69,9 @@ const FilterAndColumnsProvider = ({ children }: { children: React.ReactNode }) =
   });
 
   return (
-    <FilterAndColumnsContext.Provider value={{ filters, setFilters }}>
+    <FilterAndColumnsContext.Provider
+      value={{ filters, setFilters, filtersActive, setFiltersActive }}
+    >
       {children}
     </FilterAndColumnsContext.Provider>
   );

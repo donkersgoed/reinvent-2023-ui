@@ -20,7 +20,7 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
   const [allSessions, setAllSessions] = React.useState<Session[]>([]);
   const [isLoading, setLoading] = React.useState(true);
   const [initialLoadComplete, setInitialLoadComplete] = React.useState(false);
-  const { filters, setFilters } = React.useContext(FilterAndColumnsContext);
+  const { filters, setFilters, setFiltersActive } = React.useContext(FilterAndColumnsContext);
 
   React.useEffect(() => {
     getSessions().then((data) => {
@@ -34,11 +34,6 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
       // Nothing to do
       return;
     }
-    // if (typeof window !== "undefined" && window.localStorage) {
-    //   console.log("Loading filters");
-    //   console.log("Local storage available");
-    //   console.log(JSON.stringify(filters));
-    // }
 
     const addOptionToFilter = (filterName: string, option: string) => {
       const newFilters = { ...filters };
@@ -76,27 +71,35 @@ const SessionListContainer: React.FC<SessionListContainerProps> = (props) => {
         }
       }
 
+      let activeFilters = 0;
       const filtersWithLocalPrefs = { ...newFilters };
       // Iterate over the keys in the original object
       for (const key in filtersWithLocalPrefs) {
         if (filtersWithLocalPrefs.hasOwnProperty(key)) {
           const options = filtersWithLocalPrefs[key].options;
 
+          let filterPrefFound = false;
           // Iterate over the options in the 'options' dictionary
           for (const optionKey in options) {
             if (localPrefs.hasOwnProperty(key)) {
               if (localPrefs[key].includes(optionKey)) {
                 options[optionKey] = false; // Set value to false if it exists in local storage
+                filterPrefFound = true;
               }
             }
           }
+          if (filterPrefFound) {
+            activeFilters++;
+          }
         }
       }
+      console.log(activeFilters);
 
+      setFiltersActive(activeFilters);
       setFilters(filtersWithLocalPrefs);
     }
     if (allSessions.length > 0) setInitialLoadComplete(true);
-  }, [allSessions, filters, setFilters, initialLoadComplete]);
+  }, [allSessions, filters, setFilters, setFiltersActive, initialLoadComplete]);
 
   return (
     <Container {...props}>

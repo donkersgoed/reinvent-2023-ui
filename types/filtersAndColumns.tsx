@@ -13,7 +13,7 @@ export type Filters = {
 
 export type FilterAndColumnsContextValue = {
   filters: Filters;
-  // columns: Object;
   setFilters: React.Dispatch<React.SetStateAction<any>>;
-  // setColumns: React.Dispatch<React.SetStateAction<any>>;
+  filtersActive: number;
+  setFiltersActive: React.Dispatch<React.SetStateAction<any>>;
 };
